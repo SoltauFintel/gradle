@@ -4,14 +4,14 @@ plugins {
 }
 
 dependencies {
-    currentClasspath(project(":distributions-full"))
-    testImplementation(project(":base-services"))
-    testImplementation(project(":model-core"))
+    currentClasspath("org.gradle:distributions-full")
+    testImplementation("org.gradle:base-services")
+    testImplementation("org.gradle:model-core")
 
     testImplementation(libs.archunitJunit4)
     testImplementation(libs.guava)
 
-    testRuntimeOnly(project(":distributions-full"))
+    testRuntimeOnly("org.gradle:distributions-full")
 }
 
 tasks.test {
