@@ -54,10 +54,10 @@ fun performanceTestCommandLine(task: String, baselines: String, extraParameters:
 ).map { (key, value) -> os.escapeKeyValuePair(key, value) }
 
 const val individualPerformanceTestArtifactRules = """
-subprojects/*/build/test-results-*.zip => results
-subprojects/*/build/tmp/**/log.txt => failure-logs
-subprojects/*/build/tmp/**/profile.log => failure-logs
-subprojects/*/build/tmp/**/daemon-*.out.log => failure-logs
+testing/end-to-end-tests/*/build/test-results-*.zip => results
+testing/end-to-end-tests/*/build/tmp/**/log.txt => failure-logs
+testing/end-to-end-tests/*/build/tmp/**/profile.log => failure-logs
+testing/end-to-end-tests/*/build/tmp/**/daemon-*.out.log => failure-logs
 """
 
 fun BuildSteps.killGradleProcessesStep(os: Os) {
@@ -76,8 +76,9 @@ fun BuildSteps.substDirOnWindows(os: Os) {
             executionMode = BuildStep.ExecutionMode.ALWAYS
             scriptContent = """dir p: || subst p: "%teamcity.build.checkoutDir%" """
         }
-        cleanBuildLogicBuild("P:/build-logic-commons", os)
-        cleanBuildLogicBuild("P:/build-logic", os)
+        cleanBuildLogicBuild("P:/build-logic/build-logic-base", buildCache, os)
+        cleanBuildLogicBuild("P:/build-logic/build-logic-commons", os)
+        cleanBuildLogicBuild("P:/build-logic/build-logic", os)
     }
 }
 
@@ -88,8 +89,9 @@ fun BuildSteps.removeSubstDirOnWindows(os: Os) {
             executionMode = BuildStep.ExecutionMode.ALWAYS
             scriptContent = """dir p: && subst p: /d"""
         }
-        cleanBuildLogicBuild("%teamcity.build.checkoutDir%/build-logic-commons", os)
-        cleanBuildLogicBuild("%teamcity.build.checkoutDir%/build-logic", os)
+        cleanBuildLogicBuild("%teamcity.build.checkoutDir%/build-logic/build-logic-base", buildCache, os)
+        cleanBuildLogicBuild("%teamcity.build.checkoutDir%/build-logic/build-logic-commons", os)
+        cleanBuildLogicBuild("%teamcity.build.checkoutDir%/build-logic/build-logic", os)
     }
 }
 
@@ -103,7 +105,7 @@ private fun BuildSteps.cleanBuildLogicBuild(buildDir: String, os: Os) {
         tasks = "clean"
         workingDir = buildDir
         executionMode = BuildStep.ExecutionMode.ALWAYS
-        gradleWrapperPath = "../"
+        gradleWrapperPath = "../../"
         gradleParams = (
             buildToolGradleParameters() +
                 buildScanTag("PerformanceTest")
