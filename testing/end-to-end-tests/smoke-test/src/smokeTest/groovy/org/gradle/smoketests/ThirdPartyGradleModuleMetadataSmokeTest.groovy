@@ -72,8 +72,8 @@ class ThirdPartyGradleModuleMetadataSmokeTest extends AbstractSmokeTest {
             'From android-library',
             'From android-library (single variant)',
             'From android-kotlin-library',
-            'From kotlin-multiplatform-library',
-            'From kotlin-multiplatform-library (with Android variant)'
+            'From kotlin-mpp-library',
+            'From kotlin-mpp-library (with Android variant)'
         ]
 
         when:
@@ -86,8 +86,8 @@ class ThirdPartyGradleModuleMetadataSmokeTest extends AbstractSmokeTest {
             'From android-library',
             'From android-library (single variant)',
             'From android-kotlin-library',
-            'From kotlin-multiplatform-library',
-            'From kotlin-multiplatform-library (with Android variant)'
+            'From kotlin-mpp-library',
+            'From kotlin-mpp-library (with Android variant)'
         ]
 
         when:
@@ -107,8 +107,8 @@ class ThirdPartyGradleModuleMetadataSmokeTest extends AbstractSmokeTest {
 
         then:
         trimmedOutput(result) == [
-            'From kotlin-multiplatform-library',
-            'From kotlin-multiplatform-library (with Android variant)'
+            'From kotlin-mpp-library',
+            'From kotlin-mpp-library (with Android variant)'
         ]
     }
 
