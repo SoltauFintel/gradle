@@ -284,6 +284,7 @@ dependencies {
 
         then:
         lockfileFixture.verifyLockfile('lockedConf', ['org:foo:1.1'])
+        lockfileFixture.assertLegacyLockfileMissing('lockedConf')
 
         where:
         unique << [true, false]

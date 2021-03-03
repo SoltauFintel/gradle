@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -204,6 +205,19 @@ public class LockFileReaderWriter {
         mapLockStateFromDependencyToConfiguration(lockState, dependencyToConfigurations, emptyConfigurations);
 
         writeUniqueLockfile(lockfilePath, dependencyToConfigurations, emptyConfigurations);
+
+        cleanupLegacyLockFiles(lockState.keySet());
+    }
+
+    private void cleanupLegacyLockFiles(Set<String> lockedConfigurations) {
+        for (String configuration : lockedConfigurations) {
+            Path lockFile = lockFilesRoot.resolve(decorate(configuration) + FILE_SUFFIX);
+            try {
+                Files.delete(lockFile);
+            } catch (IOException e) {
+                // Ignore - this is a best effort only
+            }
+        }
     }
 
     private void writeUniqueLockfile(Path lockfilePath, Map<String, List<String>> dependencyToConfigurations, List<String> emptyConfigurations) {
