@@ -24,18 +24,15 @@ import org.gradle.api.internal.artifacts.dsl.dependencies.DependencyLockingState
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 public class NoOpDependencyLockingProvider implements DependencyLockingProvider {
 
-    private static final NoOpDependencyLockingProvider INSTANCE = new NoOpDependencyLockingProvider();
+    private final DependencyLockingProvider delegate;
 
-    public static DependencyLockingProvider getInstance() {
-        return INSTANCE;
-    }
-
-    private NoOpDependencyLockingProvider() {
-        // Prevent construction
+    public NoOpDependencyLockingProvider(@Nullable DependencyLockingProvider delegate) {
+        this.delegate = delegate;
     }
 
     @Override
@@ -66,5 +63,12 @@ public class NoOpDependencyLockingProvider implements DependencyLockingProvider 
     @Override
     public ListProperty<String> getIgnoredDependencies() {
         throw new IllegalStateException("Should not be invoked on the no-op instance");
+    }
+
+    @Override
+    public void confirmConfigurationNotLocked(String configurationName) {
+        if (delegate != null) {
+            delegate.confirmConfigurationNotLocked(configurationName);
+        }
     }
 }

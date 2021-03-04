@@ -295,12 +295,12 @@ class DefaultResolutionStrategySpec extends Specification {
             strategy.activateDependencyLocking()
         }
         then:
-        strategy.dependencyLockingProvider.is(expectedProvider)
+        expectedProvider.isInstance(strategy.dependencyLockingProvider)
 
         where:
         activateLocking | expectedProvider
-        true            | dependencyLockingProvider
-        false           | NoOpDependencyLockingProvider.instance
+        true            | DependencyLockingProvider.class
+        false           | NoOpDependencyLockingProvider.class
     }
 
     def 'Does not provide DependencyLockingProvider when deactivatingLocking'() {
@@ -308,7 +308,7 @@ class DefaultResolutionStrategySpec extends Specification {
         strategy.deactivateDependencyLocking()
 
         then:
-        strategy.dependencyLockingProvider.is( NoOpDependencyLockingProvider.instance)
+        strategy.dependencyLockingProvider instanceof NoOpDependencyLockingProvider
     }
 
     def "copies dependency verification state"() {

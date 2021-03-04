@@ -16,6 +16,7 @@
 
 package org.gradle.internal.locking
 
+import org.gradle.api.internal.artifacts.dsl.dependencies.DependencyLockingProvider
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -23,8 +24,9 @@ import static java.util.Collections.emptySet
 
 class NoOpDependencyLockingProviderTest extends Specification {
 
+    def delegate = Mock(DependencyLockingProvider)
     @Subject
-    def provider = NoOpDependencyLockingProvider.instance
+    def provider = new NoOpDependencyLockingProvider(delegate)
 
     def 'does not find locked dependencies'() {
         when:
@@ -44,5 +46,13 @@ class NoOpDependencyLockingProviderTest extends Specification {
 
         then:
         0 * _
+    }
+
+    def 'delegates confirmation of unlocked configuration'() {
+        when:
+        provider.confirmConfigurationNotLocked("foo")
+
+        then:
+        1 * delegate.confirmConfigurationNotLocked("foo")
     }
 }

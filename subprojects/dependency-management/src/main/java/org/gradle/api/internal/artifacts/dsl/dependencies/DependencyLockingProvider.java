@@ -37,4 +37,6 @@ public interface DependencyLockingProvider {
     RegularFileProperty getLockFile();
 
     ListProperty<String> getIgnoredDependencies();
+
+    void confirmConfigurationNotLocked(String configurationName);
 }

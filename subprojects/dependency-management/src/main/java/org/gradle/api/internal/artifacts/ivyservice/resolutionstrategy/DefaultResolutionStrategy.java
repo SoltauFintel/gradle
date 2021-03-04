@@ -71,6 +71,7 @@ public class DefaultResolutionStrategy implements ResolutionStrategyInternal {
     private final VcsResolver vcsResolver;
     private final ComponentSelectorConverter componentSelectorConverter;
     private final DependencyLockingProvider dependencyLockingProvider;
+    private final DependencyLockingProvider noLockingDependencyLockingProvider;
     private final CapabilitiesResolutionInternal capabilitiesResolution;
     private MutationValidator mutationValidator = MutationValidator.IGNORE;
 
@@ -107,6 +108,7 @@ public class DefaultResolutionStrategy implements ResolutionStrategyInternal {
         this.vcsResolver = vcsResolver;
         this.componentSelectorConverter = componentSelectorConverter;
         this.dependencyLockingProvider = dependencyLockingProvider;
+        this.noLockingDependencyLockingProvider = new NoOpDependencyLockingProvider(dependencyLockingProvider);
         this.capabilitiesResolution = capabilitiesResolution;
         // This is only used for testing purposes so we can test handling of fluid dependencies without adding dependency substitution rule
         assumeFluidDependencies = Boolean.getBoolean(ASSUME_FLUID_DEPENDENCIES);
@@ -329,7 +331,7 @@ public class DefaultResolutionStrategy implements ResolutionStrategyInternal {
         if (dependencyLockingEnabled) {
             return dependencyLockingProvider;
         } else {
-            return NoOpDependencyLockingProvider.getInstance();
+            return noLockingDependencyLockingProvider;
         }
     }
 
